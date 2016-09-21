@@ -114,6 +114,8 @@ impl FakeBluetoothDevice {
 
     make_setter!(set_address, address, String);
 
+    make_option_getter!(get_name, name, String);
+
     make_setter!(set_name, name, Option<String>);
 
     make_getter!(get_icon, icon, String);
@@ -123,6 +125,8 @@ impl FakeBluetoothDevice {
     make_getter!(get_class, class, u32);
 
     make_setter!(set_class, class, u32);
+
+    make_option_getter!(get_appearance, appearance, u16);
 
     make_setter!(set_appearance, appearance, Option<u16>);
 
@@ -160,7 +164,11 @@ impl FakeBluetoothDevice {
 
     make_setter!(set_modalias, modalias, String);
 
+    make_option_getter!(get_rssi, rssi, i16);
+
     make_setter!(set_rssi, rssi, Option<i16>);
+
+    make_option_getter!(get_tx_power, tx_power, i16);
 
     make_setter!(set_tx_power, tx_power, Option<i16>);
 
@@ -168,54 +176,6 @@ impl FakeBluetoothDevice {
 
     pub fn get_adapter(&self) -> Result<Arc<FakeBluetoothAdapter>, Box<Error>> {
         Ok(self.adapter.clone())
-    }
-
-    pub fn get_name(&self) -> Result<String, Box<Error>> {
-        let cloned = self.name.clone();
-        let name = match cloned.lock() {
-            Ok(guard) => guard.deref().clone(),
-            Err(_) => return Err(Box::from("Could not get the value.")),
-        };
-        match name {
-            Some(name) => return Ok(name),
-            None => return Err(Box::from("Could not get the value.")),
-        }
-    }
-
-    pub fn get_appearance(&self) -> Result<u16, Box<Error>> {
-        let cloned = self.appearance.clone();
-        let appearance = match cloned.lock() {
-            Ok(guard) => guard.deref().clone(),
-            Err(_) => return Err(Box::from("Could not get the value.")),
-        };
-        match appearance {
-            Some(appearance) => return Ok(appearance),
-            None => return Err(Box::from("Could not get the value.")),
-        }
-    }
-
-    pub fn get_rssi(&self) -> Result<i16, Box<Error>> {
-        let cloned = self.rssi.clone();
-        let rssi = match cloned.lock() {
-            Ok(guard) => guard.deref().clone(),
-            Err(_) => return Err(Box::from("Could not get the value.")),
-        };
-        match rssi {
-            Some(rssi) => return Ok(rssi),
-            None => return Err(Box::from("Could not get the value.")),
-        }
-    }
-
-    pub fn get_tx_power(&self) -> Result<i16, Box<Error>> {
-        let cloned = self.tx_power.clone();
-        let tx_power = match cloned.lock() {
-            Ok(guard) => guard.deref().clone(),
-            Err(_) => return Err(Box::from("Could not get the value.")),
-        };
-        match tx_power {
-            Some(tx_power) => return Ok(tx_power),
-            None => return Err(Box::from("Could not get the value.")),
-        }
     }
 
     pub fn pair(&self) -> Result<(), Box<Error>> {

@@ -62,6 +62,8 @@ impl FakeBluetoothGATTCharacteristic {
 
     make_setter!(set_uuid, uuid, String);
 
+    make_option_getter!(get_value, value, Vec<u8>);
+
     make_setter!(set_value, value, Option<Vec<u8>>);
 
     make_getter!(is_notifying);
@@ -115,18 +117,6 @@ impl FakeBluetoothGATTCharacteristic {
             Err(_) => return Err(Box::from("Could not get the value.")),
         };
         Ok(gatt_descriptors.push(descriptor))
-    }
-
-    pub fn get_value(&self) -> Result<Vec<u8>, Box<Error>> {
-        let cloned = self.value.clone();
-        let value = match cloned.lock() {
-            Ok(guard) => guard.deref().clone(),
-            Err(_) => return Err(Box::from("Could not get the value.")),
-        };
-        match value {
-            Some(value) => return Ok(value),
-            None => return Err(Box::from("Could not get the value.")),
-        }
     }
 
     pub fn read_value(&self) -> Result<Vec<u8>, Box<Error>> {
